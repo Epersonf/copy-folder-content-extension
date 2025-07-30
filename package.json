@@ -1,0 +1,39 @@
+{
+  "name": "copy-folder-content",
+  "displayName": "Copy Folder Content",
+  "description": "Copia o conteúdo de todos os arquivos em uma pasta, com caminho relativo, para o clipboard.",
+  "version": "1.0.0",
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "copyFolderContent.copy",
+        "title": "Copy Folder Content With Paths"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "generate-vsix": "npx vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "vscode": "^1.1.37"
+  },
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^3.6.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Epersonf/copy-folder-content-extension"
+  }
+}

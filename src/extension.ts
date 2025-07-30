@@ -10,7 +10,7 @@ function getAllFiles(dir: string, baseDir: string): string[] {
     if (entry.isDirectory()) {
       return getAllFiles(fullPath, baseDir);
     } else {
-      const relative = path.relative(baseDir, fullPath);
+      const relative = path.relative(baseDir, fullPath).replace(/\\/g, '/');
       const content = fs.readFileSync(fullPath, 'utf8');
       return [`// ${relative}`, content];
     }
@@ -18,15 +18,20 @@ function getAllFiles(dir: string, baseDir: string): string[] {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  const disposable = vscode.commands.registerCommand('copyFolderContent.copy', async () => {
-    const folder = await vscode.window.showOpenDialog({ canSelectFolders: true, openLabel: 'Select Folder' });
-    if (!folder?.[0]) return;
+  const disposable = vscode.commands.registerCommand('copyFolderContent.copy', async (uri: vscode.Uri | undefined) => {
+    let folderUri = uri;
 
-    const baseDir = folder[0].fsPath;
+    if (!folderUri) {
+      const selected = await vscode.window.showOpenDialog({ canSelectFolders: true, openLabel: 'Select Folder' });
+      if (!selected?.[0]) return;
+      folderUri = selected[0];
+    }
+
+    const baseDir = folderUri.fsPath;
     const content = getAllFiles(baseDir, baseDir).join('\n\n');
 
     await vscode.env.clipboard.writeText(content);
-    vscode.window.showInformationMessage('Conteúdo copiado para o clipboard.');
+    vscode.window.showInformationMessage('Folder contents copied to clipboard.');
   });
 
   context.subscriptions.push(disposable);

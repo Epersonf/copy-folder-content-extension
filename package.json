@@ -11,14 +11,24 @@
     "commands": [
       {
         "command": "copyFolderContent.copy",
-        "title": "Copy Folder Content With Paths"
+        "title": "Copy Folder Contents to Clipboard"
       }
-    ]
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "copyFolderContent.copy",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
-    "generate-vsix": "npx vsce package"
+    "generate-vsix": "npx vsce package",
+    "full-build": "npm run compile && npm run generate-vsix && code --install-extension copy-folder-content-1.0.0.vsix"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
